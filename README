@@ -1,0 +1,18 @@
+Simple thread manager for Lua.
+
+Example usage:
+
+initialization:
+t = ThreadManager()
+
+update loop:
+t:update()
+
+adding a coroutine:
+t:add(print, 'hi')
+
+adding a function to execute on the main thread:
+t:addMainLoopCall(print, 'hi')
+
+depends on my Lua ext framework
+
