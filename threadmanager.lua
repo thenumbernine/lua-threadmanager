@@ -3,10 +3,10 @@ thread manager for whoever
 threads are added through add and updated through update
 --]]
 
-require 'ext.table'
+local table = require 'ext.table'
 local class = require 'ext.class'
 
-local ThreadManager = class()
+ThreadManager = class()
 
 function ThreadManager:init()
 	self.threads = table()
@@ -14,15 +14,15 @@ function ThreadManager:init()
 end
 
 function ThreadManager:add(f, ...)
-	local thread = coroutine.create(f)
-	self.threads:insert(thread)
-	local res, err = coroutine.resume(thread, ...)	-- initial arguments
+	local th = coroutine.create(f)
+	self.threads:insert(th)
+	local res, err = coroutine.resume(th, ...)	-- initial arguments
 	if not res then
 		-- don't remove it just yet -- it'll be gathered on next loop cycle
-		io.stderr:write(tostring(err)..'\n')
-		io.stderr:write(tostring(debug.traceback(thread))..'\n')
+		print(err)
+		print(debug.traceback(thread))
 	end
-	return thread
+	return th
 end
 
 function ThreadManager:addMainLoopCall(f, ...)
@@ -39,8 +39,8 @@ function ThreadManager:update()
 		else
 			local res, err = coroutine.resume(thread)
 			if not res then
-				io.stderr:write(tostring(err)..'\n')
-				io.stderr:write(tostring(debug.traceback(thread))..'\n')
+				print(err)
+				print(debug.traceback(thread))
 				self.threads:remove(i)
 			end
 			i = i + 1
@@ -60,4 +60,3 @@ function ThreadManager:update()
 end
 
 return ThreadManager
-
