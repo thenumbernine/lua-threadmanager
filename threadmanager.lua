@@ -29,20 +29,28 @@ function ThreadManager:addMainLoopCall(f, ...)
 	self.mainLoopCalls:insert{f, ...}
 end
 
+function ThreadManager:updateThread(thread)
+	if coroutine.status(thread) == 'dead' then
+		return false
+	else
+		local res, err = coroutine.resume(thread)
+		if not res then
+			print(err)
+			print(debug.traceback(thread))
+			return false
+		end
+	end
+	return true
+end
+
 function ThreadManager:update()
 	-- update threads
 	local i = 1
 	while i <= #self.threads do
 		local thread = self.threads[i]
-		if coroutine.status(thread) == 'dead' then
+		if self:updateThread(thread) then
 			self.threads:remove(i)
 		else
-			local res, err = coroutine.resume(thread)
-			if not res then
-				print(err)
-				print(debug.traceback(thread))
-				self.threads:remove(i)
-			end
 			i = i + 1
 		end
 	end
