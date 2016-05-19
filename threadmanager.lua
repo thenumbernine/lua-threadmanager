@@ -48,7 +48,7 @@ function ThreadManager:update()
 	local i = 1
 	while i <= #self.threads do
 		local thread = self.threads[i]
-		if self:updateThread(thread) then
+		if not self:updateThread(thread) then
 			self.threads:remove(i)
 		else
 			i = i + 1
