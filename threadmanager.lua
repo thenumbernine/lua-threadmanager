@@ -21,7 +21,7 @@ function ThreadManager:add(f, ...)
 	if not res then
 		-- don't remove it just yet -- it'll be gathered on next loop cycle
 		print(err)
-		print(debug.traceback(thread))
+		print(debug.traceback(th))
 	end
 	return th
 end
