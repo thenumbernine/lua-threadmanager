@@ -18,6 +18,8 @@ function ThreadManager:add(f, ...)
 	local th = coroutine.create(f)
 	self.threads:insert(th)
 	local res, err = coroutine.resume(th, ...)	-- initial arguments
+	-- TODO this is the same as 'safehandle' within 'assertresume'
+	-- it is basically 'assertresume' except that has an extra status check
 	if not res then
 		-- don't remove it just yet -- it'll be gathered on next loop cycle
 		print(err)
