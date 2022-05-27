@@ -39,7 +39,8 @@ function ThreadManager:update()
 	local i = 1
 	while i <= #self.threads do
 		local thread = self.threads[i]
-		if not coroutine.assertresume(thread) then
+		local result, err = coroutine.assertresume(thread)
+		if not result then
 			self.threads:remove(i)
 		else
 			i = i + 1
