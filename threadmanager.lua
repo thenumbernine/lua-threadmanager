@@ -28,8 +28,10 @@ function ThreadManager:add(f, ...)
 	return th
 end
 
-function ThreadManager:addMainLoopCall(f, ...)
-	self.mainLoopCalls:insert{f, ...}
+-- first argument is the function, rest are the call arguments
+function ThreadManager:addMainLoopCall(...)
+	self.mainLoopCalls:insert(table.pack(...))
+	return #self.mainLoopCalls
 end
 
 function ThreadManager:update()
@@ -45,14 +47,15 @@ function ThreadManager:update()
 	end
 	
 	-- update main loop calls
-	if #self.mainLoopCalls > 0 then
-		local lastMainLoopCalls = self.mainLoopCalls
-		self.mainLoopCalls = table()	-- reset, in case someone wants to add to this mid-callback
-		
-		for _,call in ipairs(lastMainLoopCalls) do
-			local f = table.remove(call, 1)
-			f(unpack(call))
-		end		
+	local n = #self.mainLoopCalls
+	if n > 0 then
+		for i=1,n do
+			local call = self.mainLoopCalls[i]
+			call[1](call:unpack(2, call.n))
+		end
+		for i=n,1,-1 do
+			self.mainLoopCalls:remove(i)
+		end
 	end
 end
 
