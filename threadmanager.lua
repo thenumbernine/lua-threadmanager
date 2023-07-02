@@ -46,7 +46,7 @@ function ThreadManager:update()
 			i = i + 1
 		end
 	end
-	
+
 	-- update main loop calls
 	local n = #self.mainLoopCalls
 	if n > 0 then
