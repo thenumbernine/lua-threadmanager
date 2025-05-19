@@ -1,0 +1,9 @@
+name = "threadmanager"
+files = {
+	["README.md"] = "threadmanager/README.md",
+	["threadmanager-dev-1.rockspec"] = "threadmanager/threadmanager-dev-1.rockspec",
+	["threadmanager.lua"] = "threadmanager/threadmanager.lua",
+}
+deps = {
+	"ext",
+}
